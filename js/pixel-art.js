@@ -18,7 +18,8 @@ var nombreColores = ['White', 'LightYellow',
 
 // Variable jQuery para guardar el elemento 'color-personalizado'
 // Es decir, el que se elige con la rueda de color.
-var $colorPersonalizado = $('color-personalizado');
+var $indicadorDeColor = $('#indicador-de-color');
+var $colorPersonalizado = $('#color-personalizado');
 var $paleta = $('#paleta');
 var $grillaPixeles = $('#grilla-pixeles');
 
@@ -40,8 +41,40 @@ $colorPersonalizado.change(function() {
     // Se guarda el color de la rueda en colorActual
     colorActual = $colorPersonalizado.val();
     // Completar para que cambie el indicador-de-color al colorActual
-
+    $indicadorDeColor.css('background-color', colorActual);
 });
 
 generarPaletaDeColores();
 generarGrillaDePixeles();
+
+var $colores = $('.color-paleta');
+$colores.each(function(){
+    $(this).click(function(){
+        var color = $(this).css('background-color');
+        $indicadorDeColor.css('background-color', color);
+    });
+});
+
+var clicked = false;
+
+$grillaPixeles.children().each(function(){
+    $(this).click(function(){
+        var color = $indicadorDeColor.css('background-color');
+        $(this).css('background-color', color);
+    });
+
+    $(this).mousedown(function(){
+        clicked = true;
+    });
+
+    $(this).mouseup(function(){
+        clicked = false;
+    });
+});
+
+$grillaPixeles.children().hover(function(event){
+    if (clicked) {
+        var color = $indicadorDeColor.css('background-color');
+        $(event.target).css('background-color', color);
+    }
+});
