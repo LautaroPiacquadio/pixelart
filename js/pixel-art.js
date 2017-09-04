@@ -84,3 +84,20 @@ $('#borrar').click(function(){
         $(this).css('background-color', '#FFFFFF');
     });
 });
+
+// Cargar superheroes
+$('#batman').click(function(){
+    cargarSuperheroe(batman);
+});
+
+$('#wonder').click(function(){
+    cargarSuperheroe(wonder);
+});
+
+$('#flash').click(function(){
+    cargarSuperheroe(flash);
+});
+
+$('#invisible').click(function(){
+    cargarSuperheroe(invisible);
+});

@@ -131,6 +131,7 @@ main {
   width: 25%;
   margin: 0;
   align-items: flex-start;
+  cursor: pointer;
 }
 img {
   max-width: 100%;
