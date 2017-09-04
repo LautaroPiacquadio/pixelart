@@ -2,7 +2,7 @@
 
 // Abre una ventana para guardar nuestro arte en un archivo pixel-art.png
 function guardarPixelArt() {
-    html2canvas($grillaDePixeles, {
+    html2canvas($grillaPixeles, {
         onrendered: function(canvas) {
             theCanvas = canvas;
             canvas.toBlob(function(blob) {

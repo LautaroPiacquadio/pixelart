@@ -23,6 +23,7 @@ var $colorPersonalizado = $('#color-personalizado');
 var $paleta = $('#paleta');
 var $grillaPixeles = $('#grilla-pixeles');
 
+// Genero la paleta de colores con los colores correspondientes
 function generarPaletaDeColores() {
     nombreColores.forEach(function(color){
         var $color = $('<div>').addClass('color-paleta').css('background-color', color);
@@ -30,6 +31,7 @@ function generarPaletaDeColores() {
     });
 }
 
+// Genero la grilla de pixeles (1750 pixeles)
 function generarGrillaDePixeles() {
     for (var pixel = 0; pixel <= 1750; pixel++) {
         var $pixel = $('<div>');
@@ -47,6 +49,7 @@ $colorPersonalizado.change(function() {
 generarPaletaDeColores();
 generarGrillaDePixeles();
 
+// Seleccionar el color de la paleta al clickear en uno
 var $colores = $('.color-paleta');
 $colores.each(function(){
     $(this).click(function(){
@@ -56,22 +59,25 @@ $colores.each(function(){
 });
 
 var clicked = false;
-
 $grillaPixeles.children().each(function(){
+    // Pintar los pixeles a los que les hago click
     $(this).click(function(){
         var color = $indicadorDeColor.css('background-color');
         $(this).css('background-color', color);
     });
 
+    // Si presiono el click "clicked" es true
     $(this).mousedown(function(){
         clicked = true;
     });
 
+    // Si dejo de presionar el click "clicked" es false
     $(this).mouseup(function(){
         clicked = false;
     });
 });
 
+// Pintar los pixeles donde pasa el mouse si "clicked" es true
 $grillaPixeles.children().hover(function(event){
     if (clicked) {
         var color = $indicadorDeColor.css('background-color');
@@ -79,6 +85,7 @@ $grillaPixeles.children().hover(function(event){
     }
 });
 
+// Borrar toda la grilla
 $('#borrar').click(function(){
     $grillaPixeles.children().each(function(){
         $(this).css('background-color', '#FFFFFF');
@@ -101,3 +108,8 @@ $('#flash').click(function(){
 $('#invisible').click(function(){
     cargarSuperheroe(invisible);
 });
+
+// Guardar pixelart en imagen
+$('#guardar').click(function(){
+    guardarPixelArt();
+})
