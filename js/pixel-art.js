@@ -78,3 +78,9 @@ $grillaPixeles.children().hover(function(event){
         $(event.target).css('background-color', color);
     }
 });
+
+$('#borrar').click(function(){
+    $grillaPixeles.children().each(function(){
+        $(this).css('background-color', '#FFFFFF');
+    });
+});
