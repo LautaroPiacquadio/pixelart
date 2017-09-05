@@ -75,14 +75,15 @@ $grillaPixeles.children().each(function(){
     $(this).mouseup(function(){
         clicked = false;
     });
-});
 
-// Pintar los pixeles donde pasa el mouse si "clicked" es true
-$grillaPixeles.children().hover(function(event){
-    if (clicked) {
-        var color = $indicadorDeColor.css('background-color');
-        $(event.target).css('background-color', color);
-    }
+    // Cuando muevo el mouse
+    $(this).mousemove(function(){
+        // Pintar los pixeles donde pasa el mouse si "clicked" es true
+        if (clicked) {
+            var color = $indicadorDeColor.css('background-color');
+            $(this).css('background-color', color);
+        }
+    });
 });
 
 // Borrar toda la grilla
@@ -109,7 +110,17 @@ $('#invisible').click(function(){
     cargarSuperheroe(invisible);
 });
 
-// Guardar pixelart en imagen
+// Abrir modal de guardar
 $('#guardar').click(function(){
+    $('#modal').css('display', 'block');
+});
+
+// Cerrar modal de guardar
+$('#guardar-cerrar').click(function(){
+    $('#modal').css('display', 'none');
+});
+
+// Guardar pixelart en imagen
+$('#guardar-aceptar').click(function(){
     guardarPixelArt();
-})
+});

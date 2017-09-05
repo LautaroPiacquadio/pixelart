@@ -2,14 +2,19 @@
 
 // Abre una ventana para guardar nuestro arte en un archivo pixel-art.png
 function guardarPixelArt() {
+    var nombre = $("#input-nombre").val();
+    if (!nombre) {
+        nombre = "pixel-art"
+    }
     html2canvas($grillaPixeles, {
         onrendered: function(canvas) {
             theCanvas = canvas;
             canvas.toBlob(function(blob) {
-                saveAs(blob, "pixel-art.png");
+                saveAs(blob, nombre + ".png");
             });
         }
     });
+    $('#modal').css('display', 'none');
 }
 
 // Carga a un superheroe predefinido
