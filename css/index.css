@@ -239,6 +239,10 @@ img {
       width: 350px;
       margin: 0 auto
     }
+
+    #modal .modal-container {
+        width: 100%;
+    }
 }
 @media only screen and (max-width: 375px) {
   #grilla-pixeles {
@@ -255,5 +259,9 @@ img {
      .imgs li {
     width: 100px;
     margin: 0 auto;
+  }
+
+  #modal .modal-container h2 {
+      font-size: 0.8em;
   }
 }
