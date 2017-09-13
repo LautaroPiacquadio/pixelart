@@ -23,6 +23,9 @@ var $colorPersonalizado = $('#color-personalizado');
 var $paleta = $('#paleta');
 var $grillaPixeles = $('#grilla-pixeles');
 
+// Por defecto el inidcador de color está en blanco
+$indicadorDeColor.css('background-color', 'white');
+
 // Genero la paleta de colores con los colores correspondientes
 function generarPaletaDeColores() {
     nombreColores.forEach(function(color){
@@ -55,6 +58,7 @@ $colores.each(function(){
     $(this).click(function(){
         var color = $(this).css('background-color');
         $indicadorDeColor.css('background-color', color);
+        $('body').animate({ 'background-color': color }, 1000, 'linear');
     });
 });
 
@@ -86,13 +90,6 @@ $grillaPixeles.children().each(function(){
     });
 });
 
-// Borrar toda la grilla
-$('#borrar').click(function(){
-    $grillaPixeles.children().each(function(){
-        $(this).css('background-color', '#FFFFFF');
-    });
-});
-
 // Cargar superheroes
 $('#batman').click(function(){
     cargarSuperheroe(batman);
@@ -112,15 +109,33 @@ $('#invisible').click(function(){
 
 // Abrir modal de guardar
 $('#guardar').click(function(){
-    $('#modal').css('display', 'block');
+    $('#modal-guardar').fadeIn(200, 'linear');
 });
 
 // Cerrar modal de guardar
 $('#guardar-cerrar').click(function(){
-    $('#modal').css('display', 'none');
+    $('#modal-guardar').fadeOut(200, 'linear');
 });
 
 // Guardar pixelart en imagen
 $('#guardar-aceptar').click(function(){
     guardarPixelArt();
+});
+
+// Abrir modal de borrar
+$('#borrar').click(function(){
+    $('#modal-borrar').fadeIn(200, 'linear');
+});
+
+// Cerrar modal de borrar
+$('#borrar-cerrar').click(function(){
+    $('#modal-borrar').fadeOut(200, 'linear');
+});
+
+// Borrar toda la grilla
+$('#borrar-aceptar').click(function(){
+    $grillaPixeles.children().each(function(){
+        $(this).css('background-color', '#FFFFFF');
+    });
+    $('#modal-borrar').fadeOut(200, 'linear');
 });

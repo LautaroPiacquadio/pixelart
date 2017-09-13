@@ -14,7 +14,7 @@ function guardarPixelArt() {
             });
         }
     });
-    $('#modal').css('display', 'none');
+    $('#modal-guardar').fadeOut(200, 'linear');
 }
 
 // Carga a un superheroe predefinido
