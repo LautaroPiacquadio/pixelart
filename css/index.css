@@ -172,7 +172,7 @@ img {
   background-color: black;
 }
 
-#modal-guardar, #modal-borrar {
+#modal-descargar, #modal-guardar, #modal-cargar, #modal-borrar {
     background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 100vh;

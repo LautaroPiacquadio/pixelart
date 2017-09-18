@@ -1,8 +1,8 @@
 // No modifiques estas funciones a menos que sepas MUY BIEN lo que estas haciendo!
 
 // Abre una ventana para guardar nuestro arte en un archivo pixel-art.png
-function guardarPixelArt() {
-    var nombre = $("#input-nombre").val();
+function descargarPixelArt() {
+    var nombre = $("#input-nombre-descargar").val();
     if (!nombre) {
         nombre = "pixel-art"
     }
@@ -14,7 +14,7 @@ function guardarPixelArt() {
             });
         }
     });
-    $('#modal-guardar').fadeOut(200, 'linear');
+    $('#modal-descargar').fadeOut(200, 'linear');
 }
 
 // Carga a un superheroe predefinido

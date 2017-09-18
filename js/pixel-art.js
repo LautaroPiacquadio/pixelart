@@ -36,7 +36,7 @@ function generarPaletaDeColores() {
 
 // Genero la grilla de pixeles (1750 pixeles)
 function generarGrillaDePixeles() {
-    for (var pixel = 0; pixel <= 1750; pixel++) {
+    for (var pixel = 0; pixel <= 1748; pixel++) {
         var $pixel = $('<div>');
         $grillaPixeles.append($pixel);
     }
@@ -107,19 +107,19 @@ $('#invisible').click(function(){
     cargarSuperheroe(invisible);
 });
 
-// Abrir modal de guardar
-$('#guardar').click(function(){
-    $('#modal-guardar').fadeIn(200, 'linear');
+// Abrir modal de descargar
+$('#descargar').click(function(){
+    $('#modal-descargar').fadeIn(200, 'linear');
 });
 
-// Cerrar modal de guardar
-$('#guardar-cerrar').click(function(){
-    $('#modal-guardar').fadeOut(200, 'linear');
+// Cerrar modal de descargar
+$('#descargar-cerrar').click(function(){
+    $('#modal-descargar').fadeOut(200, 'linear');
 });
 
-// Guardar pixelart en imagen
-$('#guardar-aceptar').click(function(){
-    guardarPixelArt();
+// Descargar pixelart en imagen
+$('#descargar-aceptar').click(function(){
+    descargarPixelArt();
 });
 
 // Abrir modal de borrar
@@ -139,3 +139,63 @@ $('#borrar-aceptar').click(function(){
     });
     $('#modal-borrar').fadeOut(200, 'linear');
 });
+
+// Abrir modal de guardar
+$('#guardar').click(function(){
+    $('#modal-guardar').fadeIn(200, 'linear');
+});
+
+// Cerrar modal de guardar
+$('#guardar-cerrar').click(function(){
+    $('#modal-guardar').fadeOut(200, 'linear');
+});
+
+// Guardar pixelart
+$('#guardar-aceptar').click(function(){
+    guardarPixelArt();
+});
+
+// Abrir modal de cargar
+$('#cargar').click(function(){
+    $('#modal-cargar').fadeIn(200, 'linear');
+});
+
+// Cerrar modal de cargar
+$('#cargar-cerrar').click(function(){
+    $('#modal-cargar').fadeOut(200, 'linear');
+});
+
+$('#cargar-aceptar').submit(function(event){
+    event.preventDefault();
+    var $cargarFile = $('#cargar-file');
+    var file = $cargarFile[0].files[0];
+    if (file) {
+        fr = new FileReader();
+        fr.onload = function(data) {
+            var result = JSON.parse(fr.result);
+            var error = fr.error;
+            if (!error) {
+                cargarSuperheroe(result.arte);
+            }
+        }
+        fr.readAsText(file);
+        $('#modal-cargar').fadeOut(200, 'linear');
+    }
+});
+
+function guardarPixelArt() {
+    var arte = [];
+    $grillaPixeles.children().each(function(){
+        arte.push($(this).css('background-color'));
+    })
+    var nombre = $("#input-nombre-guardar").val();
+    if (!nombre) {
+        nombre = "pixel-art"
+    }
+    var resultado = {
+        arte: arte
+    }
+    var blob = new Blob([JSON.stringify(resultado, null, 2)], { type: "application/json" });
+    saveAs(blob, nombre + ".json");
+    $('#modal-guardar').fadeOut(200, 'linear');
+}
