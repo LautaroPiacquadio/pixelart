@@ -22,6 +22,8 @@ var $colorPersonalizado = $('#color-personalizado');
 var $paleta = $('#paleta');
 var $grillaPixeles = $('#grilla-pixeles');
 var $grillaPixelesChildrens = $grillaPixeles.children();
+var $superheroe = $('.superheroe');
+var $accion = $('.accion');
 var $body = $('body');
 var clicked = false;
 
@@ -42,7 +44,7 @@ function guardarPixelArt() {
     }
     var blob = new Blob([JSON.stringify(resultado, null, 2)], { type: "application/json" });
     saveAs(blob, nombre + ".json");
-    $('#modal-guardar').fadeOut(200, 'linear');
+    cerrarModal('#modal-guardar');
 }
 
 // Genero la paleta de colores con los colores correspondientes
@@ -95,6 +97,36 @@ function pintar(event) {
     });
 }
 
+// Cargo el superheroe
+function cargarSuperheroe(event) {
+    var id = $(event.target).attr('id');
+    var superheroe = null;
+    if (id === 'batman') {
+        superheroe = batman;
+    } else if (id === 'wonder') {
+        superheroe = wonder;
+    } else if (id === 'flash') {
+        superheroe = flash;
+    } else if (id === 'invisible') {
+        superheroe = invisible;
+    }
+
+    if (superheroe) {
+        cargarPixelart(superheroe);
+    }
+}
+
+// Abrir modal
+function abrirModal(event) {
+    var id = $(event.target).attr('id');
+    $('#modal-' + id).fadeIn(200, 'linear');
+}
+
+// Cerrar modal
+function cerrarModal(id) {
+    $(id).fadeOut(200, 'linear');
+}
+
 // Por defecto el indicador de color está en blanco
 $indicadorDeColor.css('background-color', 'white');
 
@@ -109,35 +141,22 @@ generarPaletaDeColores();
 generarGrillaDePixeles();
 
 // ### Eventos ###
+
+// Selecciono el color de la paleta
 $paleta.click(seleccionarColor);
 
+// Pinto en la grilla
 $grillaPixeles.click(pintar);
 
-// Cargar superheroes
-$('#batman').click(function(){
-    cargarSuperheroe(batman);
-});
+// Cargar superheroe
+$superheroe.click(cargarSuperheroe);
 
-$('#wonder').click(function(){
-    cargarSuperheroe(wonder);
-});
-
-$('#flash').click(function(){
-    cargarSuperheroe(flash);
-});
-
-$('#invisible').click(function(){
-    cargarSuperheroe(invisible);
-});
-
-// Abrir modal de descargar
-$('#descargar').click(function(){
-    $('#modal-descargar').fadeIn(200, 'linear');
-});
+// Activo una accion
+$accion.click(abrirModal);
 
 // Cerrar modal de descargar
 $('#descargar-cerrar').click(function(){
-    $('#modal-descargar').fadeOut(200, 'linear');
+    cerrarModal('#modal-descargar');
 });
 
 // Descargar pixelart en imagen
@@ -145,14 +164,9 @@ $('#descargar-aceptar').click(function(){
     descargarPixelArt();
 });
 
-// Abrir modal de borrar
-$('#borrar').click(function(){
-    $('#modal-borrar').fadeIn(200, 'linear');
-});
-
 // Cerrar modal de borrar
 $('#borrar-cerrar').click(function(){
-    $('#modal-borrar').fadeOut(200, 'linear');
+    cerrarModal('#modal-borrar');
 });
 
 // Borrar toda la grilla
@@ -160,17 +174,12 @@ $('#borrar-aceptar').click(function(){
     $grillaPixelesChildrens.each(function(){
         $(this).css('background-color', '#FFFFFF');
     });
-    $('#modal-borrar').fadeOut(200, 'linear');
-});
-
-// Abrir modal de guardar
-$('#guardar').click(function(){
-    $('#modal-guardar').fadeIn(200, 'linear');
+    cerrarModal('#modal-borrar');
 });
 
 // Cerrar modal de guardar
 $('#guardar-cerrar').click(function(){
-    $('#modal-guardar').fadeOut(200, 'linear');
+    cerrarModal('#modal-guardar');
 });
 
 // Guardar pixelart
@@ -178,14 +187,9 @@ $('#guardar-aceptar').click(function(){
     guardarPixelArt();
 });
 
-// Abrir modal de cargar
-$('#cargar').click(function(){
-    $('#modal-cargar').fadeIn(200, 'linear');
-});
-
 // Cerrar modal de cargar
-$('#cargar-cerrar').click(function(){
-    $('#modal-cargar').fadeOut(200, 'linear');
+$('#cargar-cerrar').click(function() {
+    cerrarModal('#modal-cargar');
 });
 
 // Cargo el pixelart guardado como json
@@ -199,10 +203,10 @@ $('#cargar-aceptar').submit(function(event){
             var result = JSON.parse(fr.result);
             var error = fr.error;
             if (!error && result.arte) {
-                cargarSuperheroe(result.arte);
+                cargarPixelart(result.arte);
             }
         }
         fr.readAsText(file);
-        $('#modal-cargar').fadeOut(200, 'linear');
+        cerrarModal('#modal-cargar');
     }
 });

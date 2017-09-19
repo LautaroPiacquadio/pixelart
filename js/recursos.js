@@ -14,11 +14,11 @@ function descargarPixelArt() {
             });
         }
     });
-    $('#modal-descargar').fadeOut(200, 'linear');
+    cerrarModal('#modal-descargar');
 }
 
 // Carga a un superheroe predefinido
-function cargarSuperheroe(superheroe) {
+function cargarPixelart(superheroe) {
     var $pixeles = $("#grilla-pixeles div");
     for (var i = 0; i < superheroe.length; i++) {
         $pixeles[i].style.backgroundColor = superheroe[i];
