@@ -21,7 +21,6 @@ var $indicadorDeColor = $('#indicador-de-color');
 var $colorPersonalizado = $('#color-personalizado');
 var $paleta = $('#paleta');
 var $grillaPixeles = $('#grilla-pixeles');
-var $grillaPixelesChildrens = $grillaPixeles.children();
 var $superheroe = $('.superheroe');
 var $accion = $('.accion');
 var $body = $('body');
@@ -32,7 +31,7 @@ var clicked = false;
 // Guardar el pixel-art como un .json
 function guardarPixelArt() {
     var arte = [];
-    $grillaPixelesChildrens.each(function(){
+    $grillaPixeles.children().each(function(){
         arte.push($(this).css('background-color'));
     })
     var nombre = $("#input-nombre-guardar").val();
@@ -70,31 +69,19 @@ function seleccionarColor(event) {
     $body.animate({ 'background-color': color }, 1000, 'linear');
 }
 
-// Pintar en la grilla
-function pintar(event) {
-    $(event.target).click(function(){
+// Pintar un pixel en la grilla
+function pintarUno(event) {
+    var color = $indicadorDeColor.css('background-color');
+    $(event.target).css('background-color', color);
+}
+
+// Pintar los pixeles por los que pasa el mouse
+function pintarVarios(event) {
+    // Pintar los pixeles donde pasa el mouse si "clicked" es true
+    if (clicked) {
         var color = $indicadorDeColor.css('background-color');
         $(event.target).css('background-color', color);
-    });
-
-    // Si presiono el click "clicked" es true
-    $(event.target).mousedown(function(){
-        clicked = true;
-    });
-
-    // Si dejo de presionar el click "clicked" es false
-    $(event.target).mouseup(function(){
-        clicked = false;
-    });
-
-    // Cuando muevo el mouse
-    $(event.target).mousemove(function(){
-        // Pintar los pixeles donde pasa el mouse si "clicked" es true
-        if (clicked) {
-            var color = $indicadorDeColor.css('background-color');
-            $(event.target).css('background-color', color);
-        }
-    });
+    }
 }
 
 // Cargo el superheroe
@@ -145,8 +132,21 @@ generarGrillaDePixeles();
 // Selecciono el color de la paleta
 $paleta.click(seleccionarColor);
 
-// Pinto en la grilla
-$grillaPixeles.click(pintar);
+// Pinto en la grilla el pixel clickeado
+$grillaPixeles.click(pintarUno);
+
+// Si presiono el click "clicked" es true
+$grillaPixeles.mousedown(function(){
+    clicked = true;
+});
+
+// Si dejo de presionar el click "clicked" es false
+$grillaPixeles.mouseup(function(){
+    clicked = false;
+});
+
+// Pintar los pixeles por los que pasa el cursor si "clicked" es true
+$grillaPixeles.mousemove(pintarVarios);
 
 // Cargar superheroe
 $superheroe.click(cargarSuperheroe);
@@ -171,7 +171,7 @@ $('#borrar-cerrar').click(function(){
 
 // Borrar toda la grilla
 $('#borrar-aceptar').click(function(){
-    $grillaPixelesChildrens.each(function(){
+    $grillaPixeles.children().each(function(){
         $(this).css('background-color', '#FFFFFF');
     });
     cerrarModal('#modal-borrar');
