@@ -16,15 +16,34 @@ var nombreColores = ['White', 'LightYellow',
     'LightSlateGray', 'DarkSlateGray', 'Black'
 ];
 
-// Variable jQuery para guardar el elemento 'color-personalizado'
-// Es decir, el que se elige con la rueda de color.
+// ### Variables ###
 var $indicadorDeColor = $('#indicador-de-color');
 var $colorPersonalizado = $('#color-personalizado');
 var $paleta = $('#paleta');
 var $grillaPixeles = $('#grilla-pixeles');
+var $grillaPixelesChildrens = $grillaPixeles.children();
+var $body = $('body');
+var clicked = false;
 
-// Por defecto el inidcador de color está en blanco
-$indicadorDeColor.css('background-color', 'white');
+// ### Funciones ###
+
+// Guardar el pixel-art como un .json
+function guardarPixelArt() {
+    var arte = [];
+    $grillaPixelesChildrens.each(function(){
+        arte.push($(this).css('background-color'));
+    })
+    var nombre = $("#input-nombre-guardar").val();
+    if (!nombre) {
+        nombre = "pixel-art"
+    }
+    var resultado = {
+        arte: arte
+    }
+    var blob = new Blob([JSON.stringify(resultado, null, 2)], { type: "application/json" });
+    saveAs(blob, nombre + ".json");
+    $('#modal-guardar').fadeOut(200, 'linear');
+}
 
 // Genero la paleta de colores con los colores correspondientes
 function generarPaletaDeColores() {
@@ -42,6 +61,43 @@ function generarGrillaDePixeles() {
     }
 }
 
+// Seleccionar el color de la paleta al clickear en uno
+function seleccionarColor(event) {
+    var color = $(event.target).css('background-color');
+    $indicadorDeColor.css('background-color', color);
+    $body.animate({ 'background-color': color }, 1000, 'linear');
+}
+
+// Pintar en la grilla
+function pintar(event) {
+    $(event.target).click(function(){
+        var color = $indicadorDeColor.css('background-color');
+        $(event.target).css('background-color', color);
+    });
+
+    // Si presiono el click "clicked" es true
+    $(event.target).mousedown(function(){
+        clicked = true;
+    });
+
+    // Si dejo de presionar el click "clicked" es false
+    $(event.target).mouseup(function(){
+        clicked = false;
+    });
+
+    // Cuando muevo el mouse
+    $(event.target).mousemove(function(){
+        // Pintar los pixeles donde pasa el mouse si "clicked" es true
+        if (clicked) {
+            var color = $indicadorDeColor.css('background-color');
+            $(event.target).css('background-color', color);
+        }
+    });
+}
+
+// Por defecto el indicador de color está en blanco
+$indicadorDeColor.css('background-color', 'white');
+
 $colorPersonalizado.change(function() {
     // Se guarda el color de la rueda en colorActual
     colorActual = $colorPersonalizado.val();
@@ -52,43 +108,10 @@ $colorPersonalizado.change(function() {
 generarPaletaDeColores();
 generarGrillaDePixeles();
 
-// Seleccionar el color de la paleta al clickear en uno
-var $colores = $('.color-paleta');
-$colores.each(function(){
-    $(this).click(function(){
-        var color = $(this).css('background-color');
-        $indicadorDeColor.css('background-color', color);
-        $('body').animate({ 'background-color': color }, 1000, 'linear');
-    });
-});
+// ### Eventos ###
+$paleta.click(seleccionarColor);
 
-var clicked = false;
-$grillaPixeles.children().each(function(){
-    // Pintar los pixeles a los que les hago click
-    $(this).click(function(){
-        var color = $indicadorDeColor.css('background-color');
-        $(this).css('background-color', color);
-    });
-
-    // Si presiono el click "clicked" es true
-    $(this).mousedown(function(){
-        clicked = true;
-    });
-
-    // Si dejo de presionar el click "clicked" es false
-    $(this).mouseup(function(){
-        clicked = false;
-    });
-
-    // Cuando muevo el mouse
-    $(this).mousemove(function(){
-        // Pintar los pixeles donde pasa el mouse si "clicked" es true
-        if (clicked) {
-            var color = $indicadorDeColor.css('background-color');
-            $(this).css('background-color', color);
-        }
-    });
-});
+$grillaPixeles.click(pintar);
 
 // Cargar superheroes
 $('#batman').click(function(){
@@ -134,7 +157,7 @@ $('#borrar-cerrar').click(function(){
 
 // Borrar toda la grilla
 $('#borrar-aceptar').click(function(){
-    $grillaPixeles.children().each(function(){
+    $grillaPixelesChildrens.each(function(){
         $(this).css('background-color', '#FFFFFF');
     });
     $('#modal-borrar').fadeOut(200, 'linear');
@@ -165,6 +188,7 @@ $('#cargar-cerrar').click(function(){
     $('#modal-cargar').fadeOut(200, 'linear');
 });
 
+// Cargo el pixelart guardado como json
 $('#cargar-aceptar').submit(function(event){
     event.preventDefault();
     var $cargarFile = $('#cargar-file');
@@ -174,7 +198,7 @@ $('#cargar-aceptar').submit(function(event){
         fr.onload = function(data) {
             var result = JSON.parse(fr.result);
             var error = fr.error;
-            if (!error) {
+            if (!error && result.arte) {
                 cargarSuperheroe(result.arte);
             }
         }
@@ -182,20 +206,3 @@ $('#cargar-aceptar').submit(function(event){
         $('#modal-cargar').fadeOut(200, 'linear');
     }
 });
-
-function guardarPixelArt() {
-    var arte = [];
-    $grillaPixeles.children().each(function(){
-        arte.push($(this).css('background-color'));
-    })
-    var nombre = $("#input-nombre-guardar").val();
-    if (!nombre) {
-        nombre = "pixel-art"
-    }
-    var resultado = {
-        arte: arte
-    }
-    var blob = new Blob([JSON.stringify(resultado, null, 2)], { type: "application/json" });
-    saveAs(blob, nombre + ".json");
-    $('#modal-guardar').fadeOut(200, 'linear');
-}
